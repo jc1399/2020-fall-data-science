@@ -14,19 +14,24 @@
 For this section of the exercise we will be using the bigquery-public-data.austin_311.311_service_requests  table. 
 
 5. Write a query that tells us how many rows are in the table. 
-	```SELECT
+```
+SELECT
   COUNT(*) AS row_count
 FROM
-  bigquery-public-data.austin_311.311_service_requests ```
+  bigquery-public-data.austin_311.311_service_requests
+ ```
 
 7. Write a query that tells us how many _distinct_ values there are in the complaint_description column.
-	``` SELECT
+``` 
+SELECT
   COUNT(DISTINCT complaint_description) AS complaint_count
 FROM
-  bigquery-public-data.austin_311.311_service_requests ```
+  bigquery-public-data.austin_311.311_service_requests 
+```
   
 8. Write a query that counts how many times each owning_department appears in the table and orders them from highest to lowest. 
-	``` SELECT
+``` 
+SELECT
   owning_department,
   COUNT(owning_department) AS department_count
 FROM
@@ -34,10 +39,12 @@ FROM
 GROUP BY
   owning_department
 ORDER BY
-  department_count DESC ```
+  department_count DESC 
+```
 
 9. Write a query that lists the top 5 complaint_description that appear most and the amount of times they appear in this table. (hint... limit)
-	```SELECT
+```
+SELECT
   complaint_description,
   COUNT(owning_department) AS complaint_count
 FROM
@@ -47,9 +54,12 @@ GROUP BY
 ORDER BY
   complaint_count DESC
 LIMIT
-  5 ```
+  5 
+```
+
 10. Write a query that lists and counts all the complaint_description, just for the where the owning_department is 'Animal Services Office'.
-	```SELECT
+```
+SELECT
   complaint_description,
   COUNT(owning_department) AS complaint_count
 FROM
@@ -59,10 +69,12 @@ WHERE
 GROUP BY
   complaint_description
 ORDER BY
-  complaint_count DESC ```
+  complaint_count DESC 
+```
 
 11. Write a query to check if there are any duplicate values in the unique_key column (hint.. There are two was to do this, one is to use a temporary table for the groupby, then filter for values that have more than one count, or, using just one table but including the  `having` function). 
-	``` SELECT
+``` 
+SELECT
   unique_key,
   COUNT(unique_key) AS key_count
 FROM
@@ -70,13 +82,15 @@ FROM
 GROUP BY
   unique_key
 HAVING
-  key_count > 1 ```
+  key_count > 1 
+```
 
 
 ### For the next question, use the `census_bureau_usa` tables.
 
 1. Write a query that returns each zipcode and their population for 2000 and 2010. 
-	``` SELECT
+``` 
+SELECT
   E.zipcode,
   SUM(E.population) AS population
 FROM
@@ -88,11 +102,13 @@ ON
 GROUP BY
   E.zipcode
 ORDER BY
-  E.zipcode ASC ```
+  E.zipcode ASC 
+```
 
 ### For the next section, use the  `bigquery-public-data.google_political_ads.advertiser_weekly_spend` table.
 1. Using the `advertiser_weekly_spend` table, write a query that finds the advertiser_name that spent the most in usd. 
-	``` SELECT
+``` 
+SELECT
   advertiser_name,
   spend_usd
 FROM
@@ -100,7 +116,9 @@ FROM
 ORDER BY
   spend_usd DESC
 LIMIT
-  1 ```
+  1 
+```
+
 2. Who was the 6th highest spender? (No need to insert query here, just type in the answer.)
 	``` MIKE BLOOMBERG 2020 INC ```
 
@@ -108,7 +126,8 @@ LIMIT
 	``` 2020-02-23 ```
 
 4. Using the `advertiser_weekly_spend` table, write a query that returns the sum of spend by week (using week_start_date) in usd for the month of August only. 
-	```SELECT
+```
+SELECT
   week_start_date,
   SUM(spend_usd) AS USD_Spending
 FROM
@@ -120,11 +139,13 @@ WHERE
 GROUP BY
   week_start_date
 ORDER BY
-  week_start_date ASC ```
+  week_start_date ASC 
+```
 5.  How many ads did the 'TOM STEYER 2020' campaign run? (No need to insert query here, just type in the answer.)
 	```50```
 6. Write a query that has, in the US region only, the total spend in usd for each advertiser_name and how many ads they ran. (Hint, you're going to have to join tables for this one). 
-	```SELECT
+```
+SELECT
   stat.advertiser_name,
   COUNT(stat.advertiser_name) AS numberOfAds,
   SUM(spend.spend_usd) AS adsTotalSpend
@@ -139,9 +160,12 @@ WHERE
 GROUP BY
   stat.advertiser_name
 ORDER BY
-  numberOfAds DESC ```
+  numberOfAds DESC 
+```
+
 7. For each advertiser_name, find the average spend per ad. 
-	```SELECT
+```
+SELECT
   advertiser_name,
   AVG(spend_usd + spend_eur + spend_inr + spend_bgn + spend_hrk + spend_czk + spend_dkk + spend_huf + spend_pln + spend_ron + spend_sek + spend_gbp + spend_nzd) / 13 AS avgTotalSpend
 FROM
@@ -149,9 +173,12 @@ FROM
 GROUP BY
   advertiser_name
 HAVING
-  avgTotalSpend > 0 ```
+  avgTotalSpend > 0 
+```
+
 9. Which advertiser_name had the lowest average spend per ad that was at least above 0. 
-	``` SELECT
+``` 
+SELECT
   advertiser_name,
   AVG(spend_usd + spend_eur + spend_inr + spend_bgn + spend_hrk + spend_czk + spend_dkk + spend_huf + spend_pln + spend_ron + spend_sek + spend_gbp + spend_nzd) / 13 AS avgTotalSpend
 FROM
@@ -163,11 +190,13 @@ HAVING
 ORDER BY
   avgTotalSpend ASC
 LIMIT
-  1 ```
+  1 
+```
+
 ## For this next section, use the `new_york_citibike` datasets.
 
 1. Who went on more bike trips, Males or Females?
-	```
+```
 WITH
   T AS(
   SELECT
@@ -189,19 +218,20 @@ FROM
   T
 CROSS JOIN
   TT
-	```
+```
+
 2. What was the average, shortest, and longest bike trip taken in minutes?
-	```
+```
 SELECT
   ROUND(MIN(tripduration/60),2) AS shortestDur,
   ROUND(MAX(tripduration/60),2) AS longestDur,
   ROUND(AVG(tripduration/60),2) AS averageDur
 FROM
   bigquery-public-data.new_york_citibike.citibike_trips
-	```
+```
 
 3. Write a query that, for every station_name, has the amount of trips that started there and the amount of trips that ended there. (Hint, use two temporary tables, one that counts the amount of starts, the other that counts the number of ends, and then join the two.) 
-	```
+```
 WITH
   t AS(
   SELECT
@@ -227,7 +257,7 @@ JOIN
   tt
 ON
   start_station_name = end_station_name
-	```
+```
 # The next section is the Google Colab section.  
 1. Open up this [this Colab notebook](https://colab.research.google.com/drive/1kHdTtuHTPEaMH32GotVum41YVdeyzQ74?usp=sharing).
 2. Save a copy of it in your drive. 
